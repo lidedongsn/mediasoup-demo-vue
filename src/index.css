@@ -1,0 +1,43 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+/* .gradient-bg {
+  background: linear-gradient(to bottom, #d4deff 0%, #fff 100%);
+} */
+
+.gradient-bg {
+  background: linear-gradient(
+    45deg,
+    #d6eaf0,
+    #ecf0ef,
+    #c9e5ee
+  ); /* 设置线性渐变背景色 */
+  background-size: 200% 200%; /* 设置渐变的尺寸 */
+  animation: gradientAnimation 20s linear infinite; /* 使用定义的动画，并设置持续时间和无限循环 */
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0 50%; /* 渐变的初始位置 */
+  }
+  50% {
+    background-position: 100% 50%; /* 渐变的中间位置 */
+  }
+  100% {
+    background-position: 0 50%; /* 渐变的结束位置 */
+  }
+}

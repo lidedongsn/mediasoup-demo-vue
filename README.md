@@ -2,6 +2,10 @@
 
  A vue mediasoup demo for [mediasoup-demo](https://github.com/versatica/mediasoup-demo) based on mediasoup-client
 
+## View
+![](./assets/login.jpg)
+![](./assets/home.jpg)
+
 ## Run
 
 use pnpm

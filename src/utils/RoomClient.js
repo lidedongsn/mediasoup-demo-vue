@@ -949,6 +949,7 @@ export default class RoomClient {
         });
 
         track = stream.getVideoTracks()[0];
+        track.contentHint = "detail"; 
       } else {
         device = { label: "external video" };
 
@@ -1150,6 +1151,7 @@ export default class RoomClient {
       });
 
       const track = stream.getVideoTracks()[0];
+      track.contentHint = "detail"; 
 
       await this._webcamProducer.replaceTrack({ track });
 

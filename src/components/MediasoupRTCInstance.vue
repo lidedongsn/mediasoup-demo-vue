@@ -83,6 +83,11 @@ export default {
         console.error(e);
       }
     },
+    handleBeforeUnload() {
+      if (this.roomClient) {
+        this.roomClient.close();
+      }
+    },
   },
   computed: {
     producers() {
@@ -112,12 +117,14 @@ export default {
     domready(() => {
       logger.debug("DOM ready");
       this.initializeRoomClient();
+      window.addEventListener("beforeunload", this.handleBeforeUnload);
     });
   },
   beforeUnmount() {
     if (this.roomClient) {
       this.roomClient.close();
     }
+    window.removeEventListener("beforeunload", this.handleBeforeUnload);
   },
 };
 </script>

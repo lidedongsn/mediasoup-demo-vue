@@ -2181,14 +2181,16 @@ export default class RoomClient {
 
       this._sendTransport.on(
         "produce",
-        async ({ kind, rtpParameters, appData }, callback, errback) => {
+        async ({ kind, rtpParameters }, callback, errback) => {
           try {
             // eslint-disable-next-line no-shadow
             const { id } = await this._socket.request("produce", {
               transportId: this._sendTransport.id,
               kind,
               rtpParameters,
-              appData,
+              appData:{
+                CameraType:"Visible",MissionId:"320222",Type:"video"
+              },
             });
 
             callback({ id });

@@ -17,7 +17,7 @@ import { useMeStore } from "@/store/me";
 const VIDEO_CONSTRAINS = {
   qvga: { width: { ideal: 320 }, height: { ideal: 180 } },
   vga: { width: { ideal: 640 }, height: { ideal: 360 } }, // frameRate: { ideal: 10, max: 15 } },
-  hd: { width: { ideal: 1280 }, height: { ideal: 720 } },
+  hd: { width: { exact: 1280 }, height: { exact: 720 } },
 };
 
 const PC_PROPRIETARY_CONSTRAINTS = {
@@ -949,7 +949,7 @@ export default class RoomClient {
         });
 
         track = stream.getVideoTracks()[0];
-        track.contentHint = "detail"; 
+        // track.contentHint = "detail"; 
       } else {
         device = { label: "external video" };
 
@@ -960,14 +960,14 @@ export default class RoomClient {
 
       let encodings = [
         {
-          //   maxBitrate: 1000000,
-          //   minBitrate: 5000000,
+            maxBitrate: 5000000,
+            minBitrate: 1000000,
           maxFramerate: 30,
         },
       ];
       let codec;
       const codecOptions = {
-        videoGoogleStartBitrate: 1500,
+        videoGoogleStartBitrate: 3000,
         videoGoogleMaxBitrate: 5000,
         videoGoogleMinBitrate: 800,
       };
@@ -1137,7 +1137,7 @@ export default class RoomClient {
       );
 
       // Reset video resolution to vga.
-      this._webcam.resolution = "vga";
+      this._webcam.resolution = "hd";
 
       if (!this._webcam.device) throw new Error("no webcam devices");
 
@@ -1151,7 +1151,7 @@ export default class RoomClient {
       });
 
       const track = stream.getVideoTracks()[0];
-      track.contentHint = "detail"; 
+      // track.contentHint = "detail"; 
 
       await this._webcamProducer.replaceTrack({ track });
 
@@ -1197,7 +1197,7 @@ export default class RoomClient {
       );
 
       // Reset video resolution to HD.
-      this._webcam.resolution = "vga";
+      this._webcam.resolution = "hd";
 
       if (!this._webcam.device) throw new Error("no webcam devices");
 

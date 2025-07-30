@@ -17,7 +17,8 @@ import { useMeStore } from "@/store/me";
 const VIDEO_CONSTRAINS = {
   qvga: { width: { ideal: 320 }, height: { ideal: 180 } },
   vga: { width: { ideal: 640 }, height: { ideal: 360 } }, // frameRate: { ideal: 10, max: 15 } },
-  hd: { width: { exact: 1280 }, height: { exact: 720 } },
+  hd: { width: { exact: 1280 }, height: { exact: 720 }, frameRate: { ideal: 20, max: 20 } },
+  fullhd: { width: { exact: 1920 }, height: { exact: 1080 }, frameRate: { ideal: 20, max: 20 } },
 };
 
 const PC_PROPRIETARY_CONSTRAINTS = {
@@ -233,7 +234,7 @@ export default class RoomClient {
     // - {String} [resolution] - 'qvga' / 'vga' / 'hd'.
     this._webcam = {
       device: null,
-      resolution: "hd",
+      resolution: "fullhd",
     };
 
     // if (this._e2eKey && e2e.isSupported())
@@ -960,15 +961,16 @@ export default class RoomClient {
 
       let encodings = [
         {
-            maxBitrate: 5000000,
+            maxBitrate: 2000000,
             minBitrate: 1000000,
-          maxFramerate: 30,
+            scaleResolutionDownBy: 1,
+          // maxFramerate: 30,
         },
       ];
       let codec;
       const codecOptions = {
-        videoGoogleStartBitrate: 3000,
-        videoGoogleMaxBitrate: 5000,
+        videoGoogleStartBitrate: 1000,
+        videoGoogleMaxBitrate: 2000,
         videoGoogleMinBitrate: 800,
       };
 
@@ -1051,7 +1053,16 @@ export default class RoomClient {
         codecOptions,
         codec,
       });
-
+      //lidedongsn
+       const parameters = this._webcamProducer._rtpSender.getParameters();
+    if (!parameters.encodings) {
+      parameters.encodings = [{}];
+    }
+  
+      parameters.encodings[0].scaleResolutionDownBy = 1;
+      parameters.encodings[0].width = 1280;
+      parameters.encodings[0].height = 720;
+    
       // if (this._e2eKey && e2e.isSupported())
       // {
       // 	e2e.setupSenderTransform(this._webcamProducer.rtpSender);
@@ -1137,7 +1148,7 @@ export default class RoomClient {
       );
 
       // Reset video resolution to vga.
-      this._webcam.resolution = "hd";
+      this._webcam.resolution = "fullhd";
 
       if (!this._webcam.device) throw new Error("no webcam devices");
 
@@ -1197,7 +1208,7 @@ export default class RoomClient {
       );
 
       // Reset video resolution to HD.
-      this._webcam.resolution = "hd";
+      this._webcam.resolution = "fullhd";
 
       if (!this._webcam.device) throw new Error("no webcam devices");
 
@@ -1992,7 +2003,7 @@ export default class RoomClient {
   }
 
   async getVideoLocalStats() {
-    logger.debug("getVideoLocalStats()");
+    // logger.debug("getVideoLocalStats()");
 
     const producer = this._webcamProducer || this._shareProducer;
 

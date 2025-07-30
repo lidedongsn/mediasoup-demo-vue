@@ -27,6 +27,20 @@ router.beforeEach((to, from, next) => {
   if (to.path !== "/" && !isLoggedIn) {
     // 用户未登录并且试图访问其他页面时重定向到登录页面
     next("/");
+  } else if (
+    isLoggedIn &&
+    to.path === "/home" &&
+    Object.keys(to.query).length === 0
+  ) {
+    // 已登录访问 /home，但没有 query 参数，则添加 roomId 和 peerId 参数
+    const loginInfo = JSON.parse(sessionStorage.getItem("loginData"));
+    next({
+      path: "/home",
+      query: {
+        roomId: loginInfo.roomId,
+        peerId: loginInfo.userId,
+      },
+    });
   } else {
     // 用户已登录或访问登录页面
     next();

@@ -350,7 +350,10 @@ export default {
     async onCall() {},
 
     shareRoom() {
-      const roomId = sessionStorage.getItem("inavId"); // Replace with your roomId
+      const loginInfo = JSON.parse(
+        sessionStorage.getItem("loginData")
+      );  
+      const roomId = loginInfo.roomId; // Replace with your roomId
       const shareUrl = `${window.location.origin}${
         import.meta.env.BASE_URL
       }?roomId=${roomId}`;

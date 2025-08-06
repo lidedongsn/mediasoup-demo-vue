@@ -37,7 +37,7 @@ export default {
       try {
         const loginData = JSON.parse(sessionStorage.getItem("loginData"));
 
-        const { roomId, userId, produce } = loginData;
+        const { roomId, userId, produce, wss } = loginData;
         const peerId = userId;
         const displayName = userId;
         const handlerName = undefined;
@@ -56,6 +56,7 @@ export default {
         const device = deviceInfo();
 
         const roomClient = new RoomClient({
+          wss,
           roomId,
           peerId,
           displayName,

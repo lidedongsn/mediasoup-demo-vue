@@ -4,6 +4,24 @@
       <h2 class="text-3xl font-semibold text-center text-blue-700 mb-4">
         MediasoupRTC
       </h2>
+      <!-- 环境选择区域 -->
+      <div class="mb-4">
+        <label class="text-sm text-gray-800 mr-4">选择环境</label>
+        <el-radio-group v-model="formData.env" class="mb-2">
+          <el-radio :label="'dev'">开发环境</el-radio>
+          <el-radio :label="'test'">测试环境</el-radio>
+          <el-radio :label="'prod'">正式环境</el-radio>
+          <el-radio :label="'custom'">自定义</el-radio>
+        </el-radio-group>
+        <div v-if="formData.env === 'custom'" class="mt-2">
+          <input
+            type="text"
+            v-model="formData.customEnv"
+            placeholder="请输入自定义 wss 地址"
+            class="w-full px-3 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring focus:ring-blue-500"
+          />
+        </div>
+      </div>
       <div class="mb-4">
         <label for="room-id" class="text-sm text-gray-800">房间号</label>
         <input
@@ -41,22 +59,24 @@
 </template>
 
 <script>
-// ... (import statements)
+// ...existing code...
 export default {
-  components: {
-    // ... (Element Plus components)
-  },
+  // ...existing code...
   data() {
     return {
       formData: {
         roomId: "",
         userId: "",
         produce: false,
+        env: "dev", // 默认开发环境
+        customEnv: "",
       },
       loginData: {
         roomId: "",
         userId: "",
         produce: false,
+        env: "",
+        wss: "",
       },
     };
   },
@@ -67,10 +87,26 @@ export default {
           this.$message.error("请补充房间号或用户名！");
           return;
         }
+        let wss = "";
+        if (this.formData.env === "dev") {
+          wss = "wss://192.168.4.9:4443";
+        } else if (this.formData.env === "test") {
+          wss = "wss://media-test.ikingtec.com:4443";
+        } else if (this.formData.env === "prod") {
+          wss = "wss://media.ikingtec.com:4443";
+        } else if (this.formData.env === "custom") {
+          if (!this.formData.customEnv) {
+            this.$message.error("请输入自定义 wss 地址！");
+            return;
+          }
+          wss = this.formData.customEnv;
+        }
         this.loginData = {
           roomId: this.formData.roomId,
           userId: this.formData.userId,
           produce: this.formData.produce,
+          env: this.formData.env,
+          wss,
         };
         sessionStorage.setItem("loginData", JSON.stringify(this.loginData));
         this.$router.push({ name: "HomePage" });
@@ -78,14 +114,8 @@ export default {
         this.$message.error("登录失败！");
       }
     },
-    // ... (other methods)
+    // ...existing code...
   },
-  created() {
-    //判断loginData是否已经存在，存在则清空
-    if (sessionStorage.getItem("loginData")) {
-      sessionStorage.removeItem("loginData");
-    }
-  },
-  // ...
+  // ...existing code...
 };
 </script>

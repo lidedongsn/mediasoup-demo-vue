@@ -49,6 +49,7 @@ export default class RoomClient {
   // }
 
   constructor({
+    wss,
     roomId,
     peerId,
     displayName,
@@ -82,6 +83,8 @@ export default class RoomClient {
     // Closed flag.
     // @type {Boolean}
     this._closed = false;
+
+    this._wss = wss;
 
     this._roomId = roomId;
 
@@ -178,7 +181,7 @@ export default class RoomClient {
 
     // websocket URL.
     // @type {String}
-    this._wsUrl = getProtooUrl({ roomId, peerId, consumerReplicas });
+    this._wsUrl = getProtooUrl({ wss, roomId, peerId, consumerReplicas });
 
     // socket.io-client instance.
     // @type {}
